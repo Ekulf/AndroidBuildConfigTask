@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+<project name="AndroidBuildConfigTask" default="Build">
+    <target name="Build">
+        <jar jarfile="bin/AndroidBuildConfigTask.jar" includes="*.class" basedir="bin" />
+    </target>
+</project>
+-->
+<project name="AndroidBuildConfigTask" default="dist" basedir=".">
+    <!-- set global properties for this build -->
+    <property name="src" location="src" />
+    <property name="build" location="bin" />
+
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp />
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build}" />
+    </target>
+
+    <target name="compile" depends="init" description="compile the source ">
+        <!-- Compile the java code from ${src} into ${build} -->
+        <javac srcdir="${src}" destdir="${build}" />
+    </target>
+
+    <target name="dist" depends="compile" description="generate the distribution">
+        <jar jarfile="${build}/AndroidBuildConfigTask.jar" basedir="${build}" />
+    </target>
+
+    <target name="clean" description="clean up">
+        <!-- Delete the ${build} and ${dist} directory trees -->
+        <delete dir="${build}" />
+        <delete dir="${dist}" />
+    </target>
+</project>
