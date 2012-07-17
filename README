@@ -1,3 +1,5 @@
 Based off code from the android sdk.
 
 https://android.googlesource.com/platform/sdk
+
+Add the jar to the libs folder and include the contents of market_build.xml in your ant build xml above the Android sdk build include.
