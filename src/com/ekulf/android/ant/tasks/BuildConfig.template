@@ -3,4 +3,9 @@ package #PACKAGE#;
 
 public final class BuildConfig {
     public final static boolean DEBUG = #DEBUG#;
+    public final static Market MARKET = Market.#MARKET#;
+
+    public enum Market {
+        PLAY, AMAZON, OUYA;
+    }
 }

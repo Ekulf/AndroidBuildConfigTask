@@ -1,4 +1,4 @@
-package com.ekulf.android.build;
+package com.ekulf.android.ant.tasks;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -21,13 +21,13 @@ public class BuildConfigGenerator {
     private final String mGenFolder;
     private final String mAppPackage;
     private final boolean mDebug;
-    private final MarketType mMarketType;
+    private final Market mMarket;
 
-    public BuildConfigGenerator(String genFolder, String appPackage, boolean debug, MarketType marketType) {
+    public BuildConfigGenerator(String genFolder, String appPackage, boolean debug, Market market) {
         mGenFolder = genFolder;
         mAppPackage = appPackage;
         mDebug = debug;
-        mMarketType = marketType;
+        mMarket = market;
     }
 
     public File getFolderPath() {
@@ -46,7 +46,7 @@ public class BuildConfigGenerator {
         final Map<String, String> map = new HashMap<String, String>();
         map.put(PH_PACKAGE, mAppPackage);
         map.put(PH_DEBUG, Boolean.toString(mDebug));
-        map.put(PH_MARKET, mMarketType.name());
+        map.put(PH_MARKET, mMarket.name());
 
         final String content = replaceParameters(template, map);
 
@@ -107,11 +107,15 @@ public class BuildConfigGenerator {
         return str;
     }
 
-    public enum MarketType {
+    public enum Market {
         PLAY, AMAZON, OUYA;
 
-        public static MarketType createFromString(String name) {
-            return Enum.valueOf(MarketType.class, name.toUpperCase());
+        public static Market createFromString(String name) {
+            if (name == null || name.length() == 0) {
+                return Market.PLAY;
+            }
+
+            return Enum.valueOf(Market.class, name.toUpperCase());
         }
     }
 
