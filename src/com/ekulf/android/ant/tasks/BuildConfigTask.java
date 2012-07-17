@@ -16,6 +16,7 @@ public class BuildConfigTask extends Task {
     private String mGenFolder;
     private String mAppPackage;
     private Market mMarket;
+    private Market mPreviousMarket;
 
     public void setGenFolder(Path path) {
         mGenFolder = checkSinglePath("genFolder", path);
@@ -27,6 +28,20 @@ public class BuildConfigTask extends Task {
 
     public void setMarket(String market) {
         mMarket = Market.createFromString(market);
+    }
+
+    public void setPreviousMarket(String market) {
+        if (market != null && market.length() > 0) {
+            mPreviousBuildType = market;
+        }
+    }
+
+    public void setBuildType(String buildType) {
+        mBuildType = buildType;
+    }
+
+    public void setPreviousBuildType(String previousBuildType) {
+        mPreviousBuildType = previousBuildType;
     }
 
     @Override
@@ -61,21 +76,12 @@ public class BuildConfigTask extends Task {
             try {
                 generator.generate();
             } catch (final IOException e) {
+                System.out.println("BuildConfig class error: " + e.toString());
                 throw new BuildException("Failed to create BuildConfig class", e);
             }
         } else {
             System.out.println("No need to generate new BuildConfig.");
         }
-    }
-
-    /** Sets the current build type */
-    public void setBuildType(String buildType) {
-        mBuildType = buildType;
-    }
-
-    /** Sets the previous build type */
-    public void setPreviousBuildType(String previousBuildType) {
-        mPreviousBuildType = previousBuildType;
     }
 
     private String getBuildType() {
@@ -99,7 +105,11 @@ public class BuildConfigTask extends Task {
             return false;
         }
 
-        return mBuildType.equals(mPreviousBuildType) == false;
+        if (mPreviousMarket == null || mMarket == null) {
+            return true;
+        }
+
+        return (!mBuildType.equals(mPreviousBuildType) || !mMarket.equals(mPreviousMarket));
     }
 
     static String checkSinglePath(String attribute, Path path) {
