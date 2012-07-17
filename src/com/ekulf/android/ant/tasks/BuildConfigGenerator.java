@@ -118,5 +118,4 @@ public class BuildConfigGenerator {
             return Enum.valueOf(Market.class, name.toUpperCase());
         }
     }
-
 }
